@@ -26,7 +26,6 @@ class COLLOBORATIVE_FILTERING():
         '''
         # Filter data that too less
         offertag_log = offertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
-        offertag_log.COUNT = 1
         offertag_log = threshold_likes(offertag_log, uid_min, mid_min)
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
 

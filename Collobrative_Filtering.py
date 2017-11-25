@@ -30,6 +30,7 @@ class COLLOBORATIVE_FILTERING():
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
 
         # Filter user tag data that only has offer tag
+        usertag_log = usertag_log.groupby(['ID','']).size().reset_index(name='COUNT')
         usertag_log = usertag_log.loc[offertag_log.index.values]
 
         # Build offer mapping table

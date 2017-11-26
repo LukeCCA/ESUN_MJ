@@ -9,23 +9,35 @@ import sys
 import inspect
 import os
 
+IP = "postgres"
+USER = 'postgres'
+PASSWORD = 'lukechen0419'
+DB = 'postgres'
+
+'''
+IP = "localhost"
+USER = 'chienan'
+PASSWORD = ''
+DB = 'MJ_PROTOTYPE'
+'''
+
 # connect PostgreSQL
-conn = psycopg2.connect(database = "MJ_PROTOTYPE",
-                        host = "localhost",
-                        user = "chienan",
-                        password = "")
+conn = psycopg2.connect(database = DB,
+                        host = IP,
+                        user = USER,
+                        password = PASSWORD)
 cur = conn.cursor()
 
 # Read Data
-'''
+
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
 tag_data = os.path.join( file_direction , 'INTENT_TAG.xlsx' )
 df = pd.read_excel(tag_data)
+
 '''
-
 df = pd.read_excel(sys.argv[1])
-
+'''
 
 # TagDB 轉 JSON 檔
 def TagDb_ETL(data):
@@ -59,10 +71,32 @@ def TagDb_ETL(data):
 # 標籤庫Dict
 TagDB = TagDb_ETL(df)
 
+
+# Check if there is tag_db in Postgresql
+cur.execute("select * from information_schema.tables where table_name='tag_db';")
+if bool(cur.rowcount):
+    print 'tag_db is exist!'
+    pass
+
+    '''
 # Insert Data into PostgreSQL
-for i in TagDB:
-    SQL = "INSERT INTO tag_db(tag_info) VALUES('{}');".format(json.dumps(i))
+    for i in TagDB:
+        SQL = "INSERT INTO tag_db(tag_info) VALUES('{}');".format(json.dumps(i))
+        cur.execute(SQL)
+        conn.commit()
+    print 'Tag DB ETL Done!'
+    '''
+
+else:
+    SQL = "CREATE TABLE tag_db(id serial PRIMARY KEY,tag_info json NOT NULL);"
     cur.execute(SQL)
     conn.commit()
+    print "Create Table Done!"
 
-print 'Tag DB ETL Done!'
+# Insert Data into PostgreSQL
+    print "Start Insert Data!"
+    for i in TagDB:
+        SQL = "INSERT INTO tag_db(tag_info) VALUES('{}');".format(json.dumps(i))
+        cur.execute(SQL)
+        conn.commit()
+    print 'Tag DB ETL Done!'

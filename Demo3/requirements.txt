@@ -1,0 +1,9 @@
+flask
+pandas
+redis
+xlrd
+sklearn
+scipy
+numpy
+requests
+psycopg2

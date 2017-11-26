@@ -10,18 +10,34 @@ import inspect
 import os
 import redis
 
-'''
-如果使用讀取資料的形式
+
+#如果使用讀取資料的形式
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
-tagging_log = os.path.join( file_direction , '/TAG_LOG_DOWNLOAD.xlsx' )
+tagging = os.path.join( file_direction , 'MJ_TAG.xlsx' )
+taggingvalue = os.path.join( file_direction , 'MJ_TAGVALUE.xlsx' )
+df1 = pd.read_excel(tagging)
+df2 = pd.read_excel(taggingvalue)
 
-df = pd.read_excel(tagging_log)
 '''
-
 df1 = pd.read_excel(sys.argv[1])
 df2 = pd.read_excel(sys.argv[2])
+'''
 df = pd.concat([df1,df2]).reset_index(drop = True)
+
+HOST = "postgres"
+USER = 'postgres'
+PASSWORD = 'lukechen0419'
+DB = 'postgres'
+ip = 'redis'
+
+'''
+HOST = "localhost"
+USER = 'chienan'
+PASSWORD = ''
+DB = 'MJ_PROTOTYPE'
+ip = "localhost"
+'''
 
 # 貼標庫格式
 def Tag_query(tag, sql_db):
@@ -39,11 +55,11 @@ def Tag_query(tag, sql_db):
     return data
 
 # Database設定
-redis_conn = redis.Redis(host='localhost',port=6379,db=0)
-sql_conn = psycopg2.connect(database = "MJ_PROTOTYPE",
-                        host = "localhost",
-                        user = "chienan",
-                        password = "")
+redis_conn = redis.Redis(host= ip ,port=6379,db=0)
+sql_conn = psycopg2.connect(database = DB,
+                        host = HOST,
+                        user = USER,
+                        password = PASSWORD)
 cur = sql_conn.cursor()
 
 # 組裝Tagging_Db，並塞入DB

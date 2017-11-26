@@ -9,7 +9,7 @@ import os
 class COLLOBORATIVE_FILTERING():
 
     # Model Build
-    def fit(self, usertag_log, offertag_log, uid_min=1, mid_min=1):
+    def fit(self, usertag_log, offertag_log, id_min=1, offer_min=1):
         '''
         file_path = inspect.getfile(inspect.currentframe())
         file_direction = os.path.dirname(os.path.abspath(file_path))
@@ -19,18 +19,16 @@ class COLLOBORATIVE_FILTERING():
         # Exception Process
         offertag_log = pd.read_excel(offertagging)
         usertag_log = pd.read_excel(usertagging)
-
-
-
         usertag_log = usertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
         '''
         # Filter data that too less
         offertag_log = offertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
-        offertag_log = threshold_likes(offertag_log, uid_min, mid_min)
+        offertag_log = threshold_likes(offertag_log, id_min, offer_min)
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
 
         # Filter user tag data that only has offer tag
-        usertag_log = usertag_log.groupby(['ID','']).size().reset_index(name='COUNT')
+        usertag_log = usertag_log.groupby(['ID','UTID']).size().reset_index(name='COUNT')
+        usertag_log = usertag_log.pivot_table(index=['ID'], columns='UTID',values ='COUNT').fillna(0)
         usertag_log = usertag_log.loc[offertag_log.index.values]
 
         # Build offer mapping table
@@ -73,9 +71,9 @@ class COLLOBORATIVE_FILTERING():
             pickle.dump(user_sparse, f1, pickle.HIGHEST_PROTOCOL)
         print 'user_sparse pickle Done!'
 
-        with open('offer_mapping.pickle', 'wb') as f2:
+        with open('offerlabel_mapping.pickle', 'wb') as f2:
             pickle.dump(offer_mapping, f2, pickle.HIGHEST_PROTOCOL)
-        print 'offer_mapping pickle Done!'
+        print 'offerlabel_mapping pickle Done!'
 
         with open('tag_mapping.pickle', 'wb') as f3:
             pickle.dump(usertag_mapping, f3, pickle.HIGHEST_PROTOCOL)
@@ -90,8 +88,8 @@ class COLLOBORATIVE_FILTERING():
             rating_table = pickle.load(f)
         with open('user_sparse.pickle', 'rb') as f1:
             tag = pickle.load(f1)
-        with open('offer_mapping.pickle', 'rb') as f2:
-            offer_mapping = pickle.load(f2)
+        with open('offerlabel_mapping.pickle', 'rb') as f2:
+            offerlabel_mapping = pickle.load(f2)
         with open('tag_mapping.pickle', 'rb') as f3:
             tag_mapping = pickle.load(f3)
 
@@ -114,13 +112,13 @@ class COLLOBORATIVE_FILTERING():
 
         data = []
         for i in sort_data[-15:]:
-            data.append(offer_mapping[i])
+            data.append(offerlabel_mapping[i])
 
         return data
 
 
 # Function That Define minimum numbers of data that use to build model
-def threshold_likes(df, uid_min, mid_min):
+def threshold_likes(df, id_min, offer_min):
     n_users = df.ID.unique().shape[0]
     n_items = df.LABEL_ID.unique().shape[0]
     sparsity = float(df.shape[0]) / float(n_users*n_items) * 100
@@ -133,17 +131,17 @@ def threshold_likes(df, uid_min, mid_min):
     done = False
     while not done:
         starting_shape = df.shape[0]
-        mid_counts = df.groupby('ID').LABEL_ID.count()
-        df = df[~df.ID.isin(mid_counts[mid_counts < mid_min].index.tolist())]
-        uid_counts = df.groupby('LABEL_ID').ID.count()
-        df = df[~df.LABEL_ID.isin(uid_counts[uid_counts < uid_min].index.tolist())]
+        offer_counts = df.groupby('ID').LABEL_ID.count()
+        df = df[~df.ID.isin(offer_counts[offer_counts < offer_min].index.tolist())]
+        id_counts = df.groupby('LABEL_ID').ID.count()
+        df = df[~df.LABEL_ID.isin(id_counts[id_counts < id_min].index.tolist())]
 
         ending_shape = df.shape[0]
         if starting_shape == ending_shape:
             done = True
 
-    assert(df.groupby('ID').LABEL_ID.count().min() >= mid_min)
-    assert(df.groupby('LABEL_ID').ID.count().min() >= uid_min)
+    assert(df.groupby('ID').LABEL_ID.count().min() >= offer_min)
+    assert(df.groupby('LABEL_ID').ID.count().min() >= id_min)
     n_users = df.ID.unique().shape[0]
     n_items = df.LABEL_ID.unique().shape[0]
 

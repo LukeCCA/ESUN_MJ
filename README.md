@@ -29,13 +29,13 @@ docker run -itd --name chen_test -p 6010:6010 --link redis:redis --link postgres
 Import Collobrative_Filtering.py 的 COLLOBORATIVE_FILTERING class
 ```
 ```
-建模時使用fit module，\
-input依序為userlog資料，offerlog資料另有兩個可自由輸入的參數，id_min及offer_min，\
-id_min及offer_min為建模時第一層資料的篩選，\
-id_min代表的為最少一個人最少需有的offer_tag數目，\
-offer_min則為一個offer_tag最少被接觸到的人數，兩者預設均為1，\
-其模型跑出的output為offer之ating table，\
-另外也同時產出4個pickle檔，\
+建模時使用fit module，
+input依序為userlog資料，offerlog資料另有兩個可自由輸入的參數，id_min及offer_min，
+id_min及offer_min為建模時第一層資料的篩選，
+id_min代表的為最少一個人最少需有的offer_tag數目，
+offer_min則為一個offer_tag最少被接觸到的人數，兩者預設均為1，
+其模型跑出的output為offer之ating table，
+另外也同時產出4個pickle檔，
 其內容分別為usertag的矩陣，offer rating table，offer tag的mapping table及tag mapping table
 ```
 ```

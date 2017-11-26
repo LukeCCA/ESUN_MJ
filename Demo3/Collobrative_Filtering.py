@@ -82,7 +82,7 @@ class COLLOBORATIVE_FILTERING():
         return rating_table
 
     # Predict
-    def predict(self, data):
+    def predict(self, data, number=15):
         # load Model and Mapping Table
         with open('offerrating_table.pickle', 'rb') as f:
             rating_table = pickle.load(f)
@@ -111,7 +111,7 @@ class COLLOBORATIVE_FILTERING():
         sort_data = sorted(range(len(predict)), key=lambda k: predict[k])
 
         data = []
-        for i in sort_data[-15:]:
+        for i in sort_data[-number:]:
             data.append(offerlabel_mapping[i])
 
         return data

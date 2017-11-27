@@ -22,10 +22,13 @@ class COLLOBORATIVE_FILTERING():
         usertag_log = usertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
         '''
         # Filter data that too less
-        offertag_log = offertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
+        offertag_log = offertag_log.groupby(['ID','OFFER_ID','LABEL_ID']).size().reset_index(name='COUNT')
         offertag_log = threshold_likes(offertag_log, id_min, offer_min)
         if offer_reduce:
             offertag_log.COUNT = 1 
+        offertags = offertag_log[['OFFER_ID','LABEL_ID']]
+        offertags['IND'] = 1
+        offertags = offertags.pivot_table(index='OFFER_ID',columns='LABEL_ID',values='IND').fillna(0)
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
 
         # Filter user tag data that only has offer tag
@@ -34,7 +37,7 @@ class COLLOBORATIVE_FILTERING():
         usertag_log = usertag_log.loc[offertag_log.index.values]
 
         # Build offer mapping table
-        offer_mapping, _ = mapping_table(offertag_log.columns.values.tolist())
+        offer_mapping, reverse_offertag = mapping_table(offertag_log.columns.values.tolist())
 
         # Offer Sparse Matrix
         offer_likes = sparse.coo_matrix(offertag_log.values, dtype = np.float64)
@@ -81,19 +84,26 @@ class COLLOBORATIVE_FILTERING():
             pickle.dump(usertag_mapping, f3, pickle.HIGHEST_PROTOCOL)
         print 'tag_mapping pickle Done!'
 
+        with open('reverse_offertag.pickle', 'wb') as f4:
+            pickle.dump(reverse_offertag, f4, pickle.HIGHEST_PROTOCOL)
+        print 'reverse offermapping pickle Done!'
+
         return rating_table
 
-    # Predict
-    def predict(self, data, number=15):
+    # Predict Offline
+    def predict(self, data, online=False, number=15, rating_table=None, tag=None, offerlabel_mapping=None, tag_mapping=None, reverse_offertag=None):
         # load Model and Mapping Table
-        with open('offerrating_table.pickle', 'rb') as f:
-            rating_table = pickle.load(f)
-        with open('user_sparse.pickle', 'rb') as f1:
-            tag = pickle.load(f1)
-        with open('offerlabel_mapping.pickle', 'rb') as f2:
-            offerlabel_mapping = pickle.load(f2)
-        with open('tag_mapping.pickle', 'rb') as f3:
-            tag_mapping = pickle.load(f3)
+        if online:
+            with open('offerrating_table.pickle', 'rb') as f:
+                rating_table = pickle.load(f)
+            with open('user_sparse.pickle', 'rb') as f1:
+                tag = pickle.load(f1)
+            with open('offerlabel_mapping.pickle', 'rb') as f2:
+                offerlabel_mapping = pickle.load(f2)
+            with open('tag_mapping.pickle', 'rb') as f3:
+                tag_mapping = pickle.load(f3)
+            with open('reverse_offertag.pickle', 'rb') as f4:
+                reverse_offertag = pickle.load(f4)   
 
         model_tags = tag_mapping.keys()
         user_tags = []

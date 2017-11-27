@@ -10,11 +10,11 @@ import json
 import redis
 from flask import request
 
-'''
+
 redis_ip = 'redis'
 '''
 redis_ip = 'localhost'
-
+'''
 reload(sys)
 sys.setdefaultencoding('utf8')
 

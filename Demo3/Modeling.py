@@ -12,7 +12,10 @@ usertagging = os.path.join(file_direction, 'MJ_TAG.xlsx')
 offertagging = pd.read_excel(offertagging)
 usertagging = pd.read_excel(usertagging)
 
+
 # Build Model
 model = CF.COLLOBORATIVE_FILTERING()
-rating_table = model.fit(usertagging,offertagging)
+
+# id_min & offer_min = 1 and reduce count is True
+rating_table = model.fit(usertagging,offertagging,1,1,True)
 print "Finish Model Building!"

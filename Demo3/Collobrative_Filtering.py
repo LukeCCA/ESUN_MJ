@@ -9,7 +9,7 @@ import os
 class COLLOBORATIVE_FILTERING():
 
     # Model Build
-    def fit(self, usertag_log, offertag_log, id_min=1, offer_min=1):
+    def fit(self, usertag_log, offertag_log, id_min=1, offer_min=1, offer_reduce=False):
         '''
         file_path = inspect.getfile(inspect.currentframe())
         file_direction = os.path.dirname(os.path.abspath(file_path))
@@ -24,6 +24,8 @@ class COLLOBORATIVE_FILTERING():
         # Filter data that too less
         offertag_log = offertag_log.groupby(['ID','LABEL_ID']).size().reset_index(name='COUNT')
         offertag_log = threshold_likes(offertag_log, id_min, offer_min)
+        if offer_reduce:
+            offertag_log.COUNT = 1 
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
 
         # Filter user tag data that only has offer tag

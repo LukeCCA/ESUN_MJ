@@ -19,7 +19,7 @@ docker run -it --name tagserver --link redis:redis --link postgres:postgres tag_
 ```
 5. 啟用Recommand System
 ```
-docker run -itd --name chen_test -p 6010:80 --link redis:redis --link postgres:postgres tag_api:1.0
+docker run -it --name recommand -p 6010:80 --link tagserver:tagserver recommand_api:1.0
 ```
 ## 使用Docker-compose啟動服務流程
 在ESUN_MJ目錄底下，執行

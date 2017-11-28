@@ -1,9 +1,10 @@
 # ESUN_MJ
 ## Update Demo3 (有關Demo的全部放在Demo3資料夾內)
 ## 使用Docker Run啟動服務流程
-1. 使用Dockerfile建立 tag_api:1.0 image
+1. 使用Dockerfile建立 tag_api:1.0 及 recommand_api:1.0 image
 ```
 docker build -t tag_api:1.0 
+docker build -t recommand_api:1.0 ./RecommandSystem
 ```
 2. 下載最新版本的redis
 ```

@@ -1,19 +1,25 @@
 version: '3.3'
 services:
-  tag_api: 1.0
-    build: ./Demo3
+  tag_api: 
+    image: tag_api:1.0
     depends_on:
-      - redis
       - postgres
-    ports:
-     - "6010:6010"
+      - redis
     links:
-     - "redis:redis"
-     - "postgres:postgres"
+      - "redis:redis"
+      - "postgres:postgres"
+  
+  recommand_api:
+    image: recommand_api:1.0
+    links: 
+      - "tag_api:tagserver"
+    ports:
+      - "6010:80"
 
   redis:
     image: redis:latest
   postgres:
     image: postgres:latest
-    environment: POSTGRES_PASSWORD=lukechen0419
+    environment:
+      POSTGRES_PASSWORD: lukechen0419
 

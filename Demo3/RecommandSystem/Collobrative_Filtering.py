@@ -26,7 +26,7 @@ class COLLOBORATIVE_FILTERING():
         offertag_log = threshold_likes(offertag_log, id_min, offer_min)
         if offer_reduce:
             offertag_log.COUNT = 1 
-        offertags = offertag_log[['OFFER_ID','LABEL_ID']]
+        offertags = offertag_log[['OFFER_ID','LABEL_ID']].drop_duplicates().reset_index(drop=True)
         offertags['IND'] = 1
         offertags = offertags.pivot_table(index='OFFER_ID',columns='LABEL_ID',values='IND').fillna(0)
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
@@ -143,19 +143,19 @@ def threshold_likes(df, id_min, offer_min):
     done = False
     while not done:
         starting_shape = df.shape[0]
-        offer_counts = df.groupby('ID').LABEL_ID.count()
+        offer_counts = df.groupby('ID').OFFER_ID.count()
         df = df[~df.ID.isin(offer_counts[offer_counts < offer_min].index.tolist())]
-        id_counts = df.groupby('LABEL_ID').ID.count()
-        df = df[~df.LABEL_ID.isin(id_counts[id_counts < id_min].index.tolist())]
+        id_counts = df.groupby('OFFER_ID').ID.count()
+        df = df[~df.OFFER_ID.isin(id_counts[id_counts < id_min].index.tolist())]
 
         ending_shape = df.shape[0]
         if starting_shape == ending_shape:
             done = True
 
-    assert(df.groupby('ID').LABEL_ID.count().min() >= offer_min)
-    assert(df.groupby('LABEL_ID').ID.count().min() >= id_min)
+    assert(df.groupby('ID').OFFER_ID.count().min() >= offer_min)
+    assert(df.groupby('OFFER_ID').ID.count().min() >= id_min)
     n_users = df.ID.unique().shape[0]
-    n_items = df.LABEL_ID.unique().shape[0]
+    n_items = df.OFFER_ID.unique().shape[0]
 
     sparsity = float(df.shape[0]) / float(n_users*n_items) * 100
     print('Ending likes info')

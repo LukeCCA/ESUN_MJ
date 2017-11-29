@@ -1,6 +1,7 @@
 version: '3.3'
 services:
   tag_api: 
+    build: ./Demo3
     image: tag_api:1.0
     depends_on:
       - postgres
@@ -8,18 +9,32 @@ services:
     links:
       - "redis:redis"
       - "postgres:postgres"
+    container_name: tagserver
+    networks:
+      recommand_system:
   
   recommand_api:
-    image: recommand_api:1.0
-    links: 
-      - "tag_api:tagserver"
+    build: ./Demo3/RecommandSystem
+    image: recommand_api:1.0 
     ports:
       - "6010:80"
+    container_name: recommand_api
+    networks:
+      recommand_system:
 
   redis:
     image: redis:latest
+    container_name: redis
+    networks:
+      recommand_system:
   postgres:
     image: postgres:latest
+    container_name: postgres
     environment:
       POSTGRES_PASSWORD: lukechen0419
+    networks:
+      recommand_system:
+networks:
+  recommand_system:
+    driver: bridge
 

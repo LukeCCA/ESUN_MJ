@@ -34,7 +34,7 @@ def get_recommandation():
 
     res = {'Offer': 
     model.predict(user_tags, True, 15, 6, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag, offer_maptb, offer_sparse)}
-
+    # 15為用來計算的offer tag數目，6為吐出offer的數目
     res = jsonify(res)
     res.headers['Content-Type'] = 'application/json; charset=utf-8'
     res.headers['Access-Control-Allow-Origin'] = '*'
@@ -43,7 +43,7 @@ def get_recommandation():
     return res
 
 if __name__ == "__main__":
-    
+
     # load Model and Mapping Table
     with open('offerrating_table.pickle', 'rb') as f:
         rating_table = pickle.load(f)

@@ -104,7 +104,9 @@ class COLLOBORATIVE_FILTERING():
         return rating_table
 
     # Predict Offline
-    def predict(self, data, online=False, number=15, offer_number=6, rating_table=None, tag=None, offerlabel_mapping=None, tag_mapping=None, reverse_offertag=None):
+    def predict(self, data, online=False, 
+    number=15, offer_number=6, rating_table=None, tag=None, offerlabel_mapping=None, 
+    tag_mapping=None, reverse_offertag=None, offer_maptb=None, offer_sparse=None ):
         # load Model and Mapping Table
         if not online:
             with open('offerrating_table.pickle', 'rb') as f:

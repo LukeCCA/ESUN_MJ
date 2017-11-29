@@ -33,7 +33,7 @@ def get_recommandation():
     model = CF.COLLOBORATIVE_FILTERING()
 
     res = {'Offer': 
-    model.predict(user_tags, True, 15, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag)}
+    model.predict(user_tags, True, 15, 6, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag, offer_maptb, offer_sparse)}
 
     res = jsonify(res)
     res.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -43,6 +43,7 @@ def get_recommandation():
     return res
 
 if __name__ == "__main__":
+    
     # load Model and Mapping Table
     with open('offerrating_table.pickle', 'rb') as f:
         rating_table = pickle.load(f)
@@ -54,5 +55,9 @@ if __name__ == "__main__":
         tag_mapping = pickle.load(f3)
     with open('reverse_offertag.pickle', 'rb') as f4:
         reverse_offertag = pickle.load(f4) 
+    with open('offer_maptb.pickle', 'rb') as f5:
+        offer_maptb = pickle.load(f5)
+    with open('offer_sparse.pickle', 'rb') as f6:
+        offer_sparse = pickle.load(f6)
 
     app.run(debug=True, host="0.0.0.0", port=80)

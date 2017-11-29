@@ -38,7 +38,6 @@ PASSWORD = ''
 DB = 'MJ_PROTOTYPE'
 ip = "localhost"
 '''
-
 # 貼標庫格式
 def Tag_query(tag, sql_db):
     SQL = "SELECT tag_info FROM tag_db WHERE tag_info->>'TAG_ID' = '{}';".format(tag)

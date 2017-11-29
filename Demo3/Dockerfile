@@ -3,7 +3,7 @@ MAINTAINER Chien-An Chen <lukchen419@gmail.com>
 COPY . /src
 WORKDIR /src
 RUN pip install -r requirements.txt
-CMD bash start.sh
+CMD sleep 10 && bash start.sh
 # docker build -t tag_api:1.0 .
 # docker build -t recommand_api:1.0 ./RecommandSystem
 # docker run -itd --name redis redis:latest

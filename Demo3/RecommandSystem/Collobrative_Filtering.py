@@ -26,11 +26,17 @@ class COLLOBORATIVE_FILTERING():
         offertag_log = threshold_likes(offertag_log, id_min, offer_min)
         if offer_reduce:
             offertag_log.COUNT = 1 
+
+        # Build offer mapping table
         offertags = offertag_log[['OFFER_ID','LABEL_ID']].drop_duplicates().reset_index(drop=True)
         offertags['IND'] = 1
         offertags = offertags.pivot_table(index='OFFER_ID',columns='LABEL_ID',values='IND').fillna(0)
-        offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
+        offer_maptb, _ =  mapping_table(offertags.index.values)
+        offer_sparse = sparse.coo_matrix(offertags.values, dtype = np.float64)
+        offer_sparse = offer_sparse.tocsr()
 
+        offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
+        
         # Filter user tag data that only has offer tag
         usertag_log = usertag_log.groupby(['ID','UTID']).size().reset_index(name='COUNT')
         usertag_log = usertag_log.pivot_table(index=['ID'], columns='UTID',values ='COUNT').fillna(0)
@@ -88,12 +94,19 @@ class COLLOBORATIVE_FILTERING():
             pickle.dump(reverse_offertag, f4, pickle.HIGHEST_PROTOCOL)
         print 'reverse offermapping pickle Done!'
 
+        with open('offer_maptb.pickle', 'wb') as f5:
+            pickle.dump(offer_maptb, f5, pickle.HIGHEST_PROTOCOL)
+        print 'offer_mapping table pickle done!'
+        with open('offer_sparse.pickle', 'wb') as f6:
+            pickle.dump(offer_sparse, f6, pickle.HIGHEST_PROTOCOL)
+        print 'offer map lable table pickle done!'
+
         return rating_table
 
     # Predict Offline
-    def predict(self, data, online=False, number=15, rating_table=None, tag=None, offerlabel_mapping=None, tag_mapping=None, reverse_offertag=None):
+    def predict(self, data, online=False, number=15, offer_number=6, rating_table=None, tag=None, offerlabel_mapping=None, tag_mapping=None, reverse_offertag=None):
         # load Model and Mapping Table
-        if online:
+        if not online:
             with open('offerrating_table.pickle', 'rb') as f:
                 rating_table = pickle.load(f)
             with open('user_sparse.pickle', 'rb') as f1:
@@ -104,6 +117,10 @@ class COLLOBORATIVE_FILTERING():
                 tag_mapping = pickle.load(f3)
             with open('reverse_offertag.pickle', 'rb') as f4:
                 reverse_offertag = pickle.load(f4)   
+            with open('offer_maptb.pickle', 'rb') as f5:
+                offer_maptb = pickle.load(f5)
+            with open('offer_sparse.pickle', 'rb') as f6:
+                offer_sparse = pickle.load(f6)
 
         model_tags = tag_mapping.keys()
         user_tags = []
@@ -122,17 +139,36 @@ class COLLOBORATIVE_FILTERING():
         predict = np.sum(user_similarity.reshape(len(user_similarity[0]),1) * rating_table, axis = 0)
         sort_data = sorted(range(len(predict)), key=lambda k: predict[k])
 
+        # Get top number offer tags
         data = []
         for i in sort_data[-number:]:
             data.append(offerlabel_mapping[i])
+            
+        # Offer tag mapping index
+        offer = []
+        for i in data:
+            offer.append(reverse_offertag[i])
 
-        return data
+        # Create offer table
+        offer_table = np.zeros(len(reverse_offertag))
+        for i in offer:
+            offer_table[i] = 1
+        
+        # Calculate Offer similarity
+        offer_similarity = pairwise.cosine_similarity(offer_table.reshape(1,-1), offer_sparse)
+        sort_data = sorted(range(len(offer_similarity[0])), key=lambda x: offer_similarity[0][x])
+        response = []
+        for i in sort_data[-offer_number:]:
+            response.append(offer_maptb[i])
+
+        return response
+
 
 
 # Function That Define minimum numbers of data that use to build model
 def threshold_likes(df, id_min, offer_min):
     n_users = df.ID.unique().shape[0]
-    n_items = df.LABEL_ID.unique().shape[0]
+    n_items = df.OFFER_ID.unique().shape[0]
     sparsity = float(df.shape[0]) / float(n_users*n_items) * 100
     print('Starting likes info')
     print('Number of users: {}'.format(n_users))

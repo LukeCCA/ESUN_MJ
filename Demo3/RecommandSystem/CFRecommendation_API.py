@@ -22,18 +22,28 @@ TAGGING = 'tagserver'
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
-@app.route('/GetRecommandationV1',methods=['GET'])
+@app.route('/GetRecommendationV1',methods=['GET'])
 def get_recommandation():
     
     vid = request.args.get('vid')
+    number = 6 
+    number = request.args.get('number')
     url = "http://%s/GetAllTag"%(TAGGING,)
     payload = {'vid':vid}
     user_tags = requests.get(url, params=payload)
+    '''
+    if request is None:
+        res = {'Offer': []}
+        res.headers['Content-Type'] = 'application/json; charset=utf-8'
+        res.headers['Access-Control-Allow-Origin'] = '*'
+        res.headers['Access-Control-Allow-Methods'] = 'GET'
+        res.headers['Access-Control-Allow-Headers'] = 'Content-Type'  
+    return res
+    '''
     user_tags = json.loads(user_tags.content)
     model = CF.COLLOBORATIVE_FILTERING()
-
-    res = {'Offer': 
-    model.predict(user_tags, True, 15, 6, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag, offer_maptb, offer_sparse)}
+    response = model.predict(user_tags, True, 20, number, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag, offer_maptb, offer_sparse)
+    res = {'Offer': response}
     # 15為用來計算的offer tag數目，6為吐出offer的數目
     res = jsonify(res)
     res.headers['Content-Type'] = 'application/json; charset=utf-8'

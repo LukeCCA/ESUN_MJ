@@ -34,7 +34,6 @@ class COLLOBORATIVE_FILTERING():
         offer_maptb, _ =  mapping_table(offertags.index.values)
         offer_sparse = sparse.coo_matrix(offertags.values, dtype = np.float64)
         offer_sparse = offer_sparse.tocsr()
-
         offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values ='COUNT' ).fillna(0)
         
         # Filter user tag data that only has offer tag
@@ -56,7 +55,6 @@ class COLLOBORATIVE_FILTERING():
         user_sparse = sparse.coo_matrix(usertag_log.values, dtype = np.float64)
         user_sparse = user_sparse.tocsr()
 
-
         # Similarity Calculation
         user_similarity = 1 - pairwise.pairwise_distances(offer_likes, metric='cosine')
         item_similarity = 1 - pairwise.pairwise_distances(offer_likes.T, metric='cosine')
@@ -72,28 +70,22 @@ class COLLOBORATIVE_FILTERING():
         # Total Rating
         rating_table = user_rating * item_rating
 
-
         # Save User and Offer Model, Offer Mapping Table, UserTag Mapping Table
         with open('offerrating_table.pickle', 'wb') as f:
             pickle.dump(rating_table, f, pickle.HIGHEST_PROTOCOL)
         print 'offer_rating pickle Done!'
-
         with open('user_sparse.pickle', 'wb') as f1:
             pickle.dump(user_sparse, f1, pickle.HIGHEST_PROTOCOL)
         print 'user_sparse pickle Done!'
-
         with open('offerlabel_mapping.pickle', 'wb') as f2:
             pickle.dump(offer_mapping, f2, pickle.HIGHEST_PROTOCOL)
         print 'offerlabel_mapping pickle Done!'
-
         with open('tag_mapping.pickle', 'wb') as f3:
             pickle.dump(usertag_mapping, f3, pickle.HIGHEST_PROTOCOL)
         print 'tag_mapping pickle Done!'
-
         with open('reverse_offertag.pickle', 'wb') as f4:
             pickle.dump(reverse_offertag, f4, pickle.HIGHEST_PROTOCOL)
         print 'reverse offermapping pickle Done!'
-
         with open('offer_maptb.pickle', 'wb') as f5:
             pickle.dump(offer_maptb, f5, pickle.HIGHEST_PROTOCOL)
         print 'offer_mapping table pickle done!'
@@ -130,20 +122,17 @@ class COLLOBORATIVE_FILTERING():
             if i[u'TAG_ID'] in model_tags:
                 user_tags.append(tag_mapping[i[u'TAG_ID']])
 
-        tagging_table = np.zeros(len(model_tags))
-        for i in user_tags:
-                tagging_table[i] = 1
-
-        tagging_table = tagging_table.reshape(1,-1)
+        # Create offer label table
+        tagging_table = create_table(model_tags, user_tags)
 
         # Recommadation through user similality
         user_similarity = pairwise.cosine_similarity(tagging_table, tag)
         predict = np.sum(user_similarity.reshape(len(user_similarity[0]),1) * rating_table, axis = 0)
-        sort_data = sorted(range(len(predict)), key=lambda k: predict[k])
+        sort_label = sort_output(predict)
 
         # Get top number offer tags
         data = []
-        for i in sort_data[-number:]:
+        for i in sort_label[-number:]:
             data.append(offerlabel_mapping[i])
             
         # Offer tag mapping index
@@ -152,15 +141,13 @@ class COLLOBORATIVE_FILTERING():
             offer.append(reverse_offertag[i])
 
         # Create offer table
-        offer_table = np.zeros(len(reverse_offertag))
-        for i in offer:
-            offer_table[i] = 1
+        offer_table = create_table(reverse_offertag, offer)
         
         # Calculate Offer similarity
-        offer_similarity = pairwise.cosine_similarity(offer_table.reshape(1,-1), offer_sparse)
-        sort_data = sorted(range(len(offer_similarity[0])), key=lambda x: offer_similarity[0][x])
+        offer_similarity = pairwise.cosine_similarity(offer_table, offer_sparse)
+        sort_offer = sort_output(offer_similarity[0])
         response = []
-        for i in sort_data[-offer_number:]:
+        for i in sort_offer[-offer_number:]:
             response.append(offer_maptb[i])
 
         return response
@@ -169,13 +156,6 @@ class COLLOBORATIVE_FILTERING():
 
 # Function That Define minimum numbers of data that use to build model
 def threshold_likes(df, id_min, offer_min):
-    n_users = df.ID.unique().shape[0]
-    n_items = df.OFFER_ID.unique().shape[0]
-    sparsity = float(df.shape[0]) / float(n_users*n_items) * 100
-    print('Starting likes info')
-    print('Number of users: {}'.format(n_users))
-    print('Number of models: {}'.format(n_items))
-    print('Sparsity: {:4.3f}%'.format(sparsity))
 
     # Filter data that too less
     done = False
@@ -211,3 +191,15 @@ def mapping_table(data):
     for (idx, tag) in enumerate(data):
         tag_to_idx[tag] = idx
     return idx_to_tag, tag_to_idx
+
+# Sort data
+def sort_output(data):
+    sort_data = sorted(range(len(data)), key=lambda x: data[x])
+    return sort_data
+
+# Create Table
+def create_table(data, data_ind):
+    table = np.zeros(len(data))
+    for i in data_ind:
+        table[i] = 1
+    table = table.reshape(1,-1)

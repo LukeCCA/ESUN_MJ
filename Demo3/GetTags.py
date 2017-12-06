@@ -25,7 +25,12 @@ conn = redis.Redis(host=redis_ip,port=6379,db=0)
 @app.route('/GetAllTag',methods=['GET'])
 def get_alltag():
     vid = request.args.get('vid')
-    tag_info = json.loads(conn.get(vid))
+    tag_info = conn.get(vid)
+    '''
+    if tag_info is None:
+        return 
+    '''
+    tag_info = json.loads(tag_info)
     res = json.dumps(tag_info, ensure_ascii = False)
     res = jsonify(tag_info)
     res.headers['Content-Type'] = 'application/json; charset=utf-8'

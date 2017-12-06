@@ -25,19 +25,15 @@ df2 = pd.read_excel(sys.argv[2])
 '''
 df = pd.concat([df1,df2]).reset_index(drop = True)
 
-HOST = "postgres"
-USER = 'postgres'
-PASSWORD = 'lukechen0419'
+HOST_POSTGRES = os.environ['POSTGRES_IP']
+USER = os.environ['POSTGRES_USER']
+PASSWORD = os.environ['POSTGRES_PASSWORD']
+HOST_REDIS = os.environ['REDIS_IP']
+'''
 DB = 'postgres'
-ip = 'redis'
-
 '''
-HOST = "localhost"
-USER = 'chienan'
-PASSWORD = ''
 DB = 'MJ_PROTOTYPE'
-ip = "localhost"
-'''
+
 # 貼標庫格式
 def Tag_query(tag, sql_db):
     SQL = "SELECT tag_info FROM tag_db WHERE tag_info->>'TAG_ID' = '{}';".format(tag)
@@ -54,9 +50,9 @@ def Tag_query(tag, sql_db):
     return data
 
 # Database設定
-redis_conn = redis.Redis(host= ip ,port=6379,db=0)
+redis_conn = redis.Redis(host= HOST_REDIS ,port=6379,db=0)
 sql_conn = psycopg2.connect(database = DB,
-                        host = HOST,
+                        host = HOST_POSTGRES,
                         user = USER,
                         password = PASSWORD)
 cur = sql_conn.cursor()

@@ -203,3 +203,4 @@ def create_table(data, data_ind):
     for i in data_ind:
         table[i] = 1
     table = table.reshape(1,-1)
+    return table

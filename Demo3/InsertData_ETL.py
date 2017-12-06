@@ -24,16 +24,20 @@ df1 = pd.read_excel(sys.argv[1])
 df2 = pd.read_excel(sys.argv[2])
 '''
 df = pd.concat([df1,df2]).reset_index(drop = True)
-
+'''
 HOST_POSTGRES = os.environ['POSTGRES_IP']
 USER = os.environ['POSTGRES_USER']
 PASSWORD = os.environ['POSTGRES_PASSWORD']
 HOST_REDIS = os.environ['REDIS_IP']
 '''
 DB = 'postgres'
+HOST_POSTGRES = 'postgres'
+USER = 'postgres'
+PASSWORD = 'lukechen0419'
+HOST_REDIS = 'redis'
 '''
 DB = 'MJ_PROTOTYPE'
-
+'''
 # 貼標庫格式
 def Tag_query(tag, sql_db):
     SQL = "SELECT tag_info FROM tag_db WHERE tag_info->>'TAG_ID' = '{}';".format(tag)

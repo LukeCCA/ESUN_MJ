@@ -4,7 +4,7 @@ COPY . /src
 WORKDIR /src
 EXPOSE 80
 RUN pip install -r requirements.txt
-CMD python CFRecommandation_API.py
+CMD python CFRecommendation_API.py
 # docker build -t tag_api:1.0 .
 # docker build -t recommand_api1.0 ./RecommandSystem
 # docker run -itd --name redis redis:latest

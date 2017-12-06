@@ -14,11 +14,8 @@ import pickle
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-'''
-TAGGING = 'localhost:6004'
-'''
-TAGGING = 'tagserver'
 
+TAGGING = 'tagserver'
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
@@ -26,8 +23,10 @@ app.config['JSON_AS_ASCII'] = False
 def get_recommandation():
     
     vid = request.args.get('vid')
-    number = 6 
-    number = request.args.get('number')
+    
+    number = int(request.args.get('number'))
+    if number is None:
+        number = 6 
     url = "http://%s/GetAllTag"%(TAGGING,)
     payload = {'vid':vid}
     user_tags = requests.get(url, params=payload)

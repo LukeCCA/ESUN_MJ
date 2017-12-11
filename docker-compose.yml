@@ -1,6 +1,7 @@
 version: '3.3'
 services:
-  tag_api: 
+  tag_api:
+    build: ./Demo3
     image: tag_api:1.0
     depends_on:
       - postgres
@@ -10,6 +11,7 @@ services:
       recommand_system:
   
   recommand_api:
+    build: ./Demo3/ReommandSystem
     image: recommand_api:1.0 
     ports:
       - "6010:80"

@@ -1,5 +1,10 @@
 # ESUN_MJ
 ## Update Demo3 (有關Demo的全部放在Demo3資料夾內)
+
+## 呼叫API方式
+```
+curl -"http://localhost:6010/GetRecommendationV1" GET -d "vid=<vid>"
+```
 ## 使用Docker Run啟動服務流程
 1. 使用Dockerfile建立 tag_api:1.0 及 recommand_api:1.0 image
 ```
@@ -50,4 +55,16 @@ offer_min則為一個offer_tag最少被接觸到的人數，兩者預設均為1�
 ```
 ```
 預測時使用predict module，input為redis所取出的顧客貼標庫資訊，output則為其前幾大(可自己設定)的offer tag，預設為15
+```
+
+## 將Docker存出來的方法
+```
+docker save -o tag_api.tar tag_api:1.0 
+docker save -o recommand_api.tar recommand_api:1.0 
+```
+## 測試
+```
+1. 起Docker Container服務： bash DockerLoad.sh
+2. JMeter測試資料：./Test/vids.csv
+3. JMeter回應資料：./Test/JMeterTest/TestLog
 ```

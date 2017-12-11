@@ -24,9 +24,13 @@ def get_recommandation():
     
     vid = request.args.get('vid')
     
-    number = int(request.args.get('number'))
+    number = request.args.get('number')
     if number is None:
         number = 6 
+    number = int(number)
+    '''
+    url = "http://localhost:6004/GetAllTag"
+    '''
     url = "http://%s/GetAllTag"%(TAGGING,)
     payload = {'vid':vid}
     user_tags = requests.get(url, params=payload)

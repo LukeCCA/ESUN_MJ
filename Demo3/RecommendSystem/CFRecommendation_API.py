@@ -32,12 +32,14 @@ def _get_usertags(value):
     return user_tags
 
 
-'''
+
 TAG_SERVER = 'tagserver'
 RECO_PORT = 80
 '''
 TAG_SERVER = 'localhost:6004'
 RECO_PORT = 6010
+'''
+
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 

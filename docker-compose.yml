@@ -8,30 +8,30 @@ services:
       - luke_redis
     container_name: tagserver
     networks:
-      recommand_system:
+      recommend_system:
   
-  recommand_api:
-    build: ./Demo3/RecommandSystem
-    image: recommand_api:1.0 
+  recommend_api:
+    build: ./Demo3/RecommendSystem
+    image: recommend_api:1.0 
     ports:
       - "6010:80"
-    container_name: recommandapi
+    container_name: recommendapi
     networks:
-      recommand_system:
+      recommend_system:
 
   luke_redis:
     image: redis:latest
     container_name: lukeredis
     networks:
-      recommand_system:
+      recommend_system:
   luke_postgres:
     image: postgres:latest
     container_name: lukepostgres
     environment:
       POSTGRES_PASSWORD: lukechen0419
     networks:
-      recommand_system:
+      recommend_system:
 networks:
-  recommand_system:
+  recommend_system:
     driver: bridge
 

@@ -53,9 +53,9 @@ def mapping_table(data):
 # Load Data
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
-offertagging = os.path.join(file_direction, 'Train_Data.csv')
+offertagging = os.path.join(file_direction, 'MJ_OFFER.xlsx')
 usertagging = os.path.join(file_direction, 'MJ_TAG.xlsx')
-offertagging = pd.read_csv(offertagging)
+offertagging = pd.read_excel(offertagging)
 usertagging = pd.read_excel(usertagging)
 
 
@@ -112,4 +112,3 @@ print 'offer map lable table pickle done!'
 # Build Model
 model = CF.COLLOBORATIVE_FILTERING()
 rating_table = model.fit(usertag_log,offertag_log)
-print 'Finsh Model Building!!'

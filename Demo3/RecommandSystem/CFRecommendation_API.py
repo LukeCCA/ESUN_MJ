@@ -11,43 +11,53 @@ import Collobrative_Filtering as CF
 import requests
 from flask import request
 import pickle
+import pybreaker
 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-TAGGING = 'tagserver'
+
+timebreaker = pybreaker.CircuitBreaker(fail_max = 2, reset_timeout=10)
+
+
+@timebreaker
+def _get_usertags(value):
+    url = "http://%s/GetAllTag"%(TAG_SERVER,)
+    payload = {'vid':value}
+    response = requests.get(url, params=payload, timeout = 0.1)
+    try:
+        user_tags = json.loads(response.content)
+    except ValueError:
+        user_tags = json.loads(requests.get(url, params={'vid':1}, timeout = 0.1).content)
+    return user_tags
+
+
+'''
+TAG_SERVER = 'tagserver'
+RECO_PORT = 80
+'''
+TAG_SERVER = 'localhost:6004'
+RECO_PORT = 6010
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+
 
 @app.route('/GetRecommendationV1',methods=['GET'])
 def get_recommandation():
     
     vid = request.args.get('vid')
-    
     number = request.args.get('number')
+    
     if number is None:
         number = 6 
     number = int(number)
-    '''
-    url = "http://localhost:6004/GetAllTag"
-    '''
-    url = "http://%s/GetAllTag"%(TAGGING,)
-    payload = {'vid':vid}
-    user_tags = requests.get(url, params=payload)
-    '''
-    if request is None:
-        res = {'Offer': []}
-        res.headers['Content-Type'] = 'application/json; charset=utf-8'
-        res.headers['Access-Control-Allow-Origin'] = '*'
-        res.headers['Access-Control-Allow-Methods'] = 'GET'
-        res.headers['Access-Control-Allow-Headers'] = 'Content-Type'  
-    return res
-    '''
-    user_tags = json.loads(user_tags.content)
+    user_tags = _get_usertags(vid)
+    
     model = CF.COLLOBORATIVE_FILTERING()
-    response = model.predict(user_tags, True, 20, number, rating_table, tag, offerlabel_mapping, tag_mapping, reverse_offertag, offer_maptb, offer_sparse)
+    response = model.predict(user_tags, online=True, similar_num=10, offertag_num=15, offer_number=6, rating_table=rating_table, tag=tag, offerlabel_mapping=offerlabel_mapping, tag_mapping=tag_mapping, reverse_offertag=reverse_offertag, offer_maptb=offer_maptb, offer_sparse=offer_sparse)
     res = {'Offer': response}
     # 15為用來計算的offer tag數目，6為吐出offer的數目
+
     res = jsonify(res)
     res.headers['Content-Type'] = 'application/json; charset=utf-8'
     res.headers['Access-Control-Allow-Origin'] = '*'
@@ -73,4 +83,4 @@ if __name__ == "__main__":
     with open('offer_sparse.pickle', 'rb') as f6:
         offer_sparse = pickle.load(f6)
 
-    app.run(debug=True, host="0.0.0.0", port=80)
+    app.run(debug=True, host="0.0.0.0", port=RECO_PORT)

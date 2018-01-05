@@ -68,4 +68,5 @@ docker save -o recommand_api.tar recommand_api:1.0
 2. JMeter測試資料：./Test/vids.csv
 3. JMeter回應資料：./Test/JMeterTest/TestLog
 4. 實際應該回應的樣子：./Test/Response.csv
+[測試文件] ./Test/R12NCF_TestDOC.docx
 ```

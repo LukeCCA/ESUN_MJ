@@ -10,11 +10,13 @@ import json
 import redis
 from flask import request
 
-
-redis_ip = 'redis'
+'''
+redis_ip = 'lukeredis'
+get_tag_host = 80
 '''
 redis_ip = 'localhost'
-'''
+get_tag_host = 6004
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -26,10 +28,6 @@ conn = redis.Redis(host=redis_ip,port=6379,db=0)
 def get_alltag():
     vid = request.args.get('vid')
     tag_info = conn.get(vid)
-    '''
-    if tag_info is None:
-        return 
-    '''
     tag_info = json.loads(tag_info)
     res = json.dumps(tag_info, ensure_ascii = False)
     res = jsonify(tag_info)
@@ -41,4 +39,4 @@ def get_alltag():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=80)
+    app.run(debug=True, host="0.0.0.0", port=get_tag_host)

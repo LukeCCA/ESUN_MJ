@@ -31,10 +31,10 @@ PASSWORD = os.environ['POSTGRES_PASSWORD']
 HOST_REDIS = os.environ['REDIS_IP']
 '''
 DB = 'postgres'
-HOST_POSTGRES = 'postgres'
+HOST_POSTGRES = 'lukepostgres'
 USER = 'postgres'
 PASSWORD = 'lukechen0419'
-HOST_REDIS = 'redis'
+HOST_REDIS = 'lukeredis'
 '''
 DB = 'MJ_PROTOTYPE'
 '''

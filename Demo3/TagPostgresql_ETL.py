@@ -9,7 +9,7 @@ import sys
 import inspect
 import os
 
-IP = "postgres"
+IP = "lukepostgres"
 USER = 'postgres'
 PASSWORD = 'lukechen0419'
 DB = 'postgres'

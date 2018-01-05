@@ -10,13 +10,13 @@ import json
 import redis
 from flask import request
 
-'''
+
 redis_ip = 'lukeredis'
 get_tag_host = 80
 '''
 redis_ip = 'localhost'
 get_tag_host = 6004
-
+'''
 reload(sys)
 sys.setdefaultencoding('utf8')
 

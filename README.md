@@ -62,9 +62,10 @@ offer_min則為一個offer_tag最少被接觸到的人數，兩者預設均為1�
 docker save -o tag_api.tar tag_api:1.0 
 docker save -o recommand_api.tar recommand_api:1.0 
 ```
-## 測試
+## 測試步驟
 ```
-1. 起Docker Container服務： bash DockerLoad.sh
+1. 起Docker Container服務： 在根目錄底下執行 docker-compose -d
 2. JMeter測試資料：./Test/vids.csv
 3. JMeter回應資料：./Test/JMeterTest/TestLog
+4. 實際應該回應的樣子：./Test/Response.csv
 ```

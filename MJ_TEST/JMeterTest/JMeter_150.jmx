@@ -43,7 +43,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.num_threads">200</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1515466631000</longProp>
         <longProp name="ThreadGroup.end_time">1515466631000</longProp>
@@ -149,7 +149,7 @@ f.close();</stringProp>
             </value>
           </objProp>
           <stringProp name="TestPlan.comments">For scripting only</stringProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Data/ViewResultTree</stringProp>
+          <stringProp name="filename">/home/centos/CF_Recommandation/Results/ViewResultsTree</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
@@ -185,7 +185,7 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Data/SummaryReport</stringProp>
+          <stringProp name="filename">/home/centos/CF_Recommandation/Results/SummaryReport</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="彙整報告" enabled="true">
@@ -221,7 +221,7 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Data/AggregateReport</stringProp>
+          <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateReport</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="結果圖形" enabled="true">
@@ -257,7 +257,7 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Data/ResultGraph</stringProp>
+          <stringProp name="filename">/home/centos/CF_Recommandation/Results/ResultGraph</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

@@ -53,11 +53,13 @@ def get_recommandation():
     if number is None:
         number = 6 
     number = int(number)
-    user_tags = _get_usertags(vid)
-    
-    model = CF.COLLOBORATIVE_FILTERING()
-    response = model.predict(user_tags, online=True, similar_num=10, offertag_num=15, offer_number=6, rating_table=rating_table, tag=tag, offerlabel_mapping=offerlabel_mapping, tag_mapping=tag_mapping, reverse_offertag=reverse_offertag, offer_maptb=offer_maptb, offer_sparse=offer_sparse)
-    res = {'Offer': response}
+    try:
+        user_tags = _get_usertags(vid)   
+        model = CF.COLLOBORATIVE_FILTERING()
+        response = model.predict(user_tags, online=True, similar_num=10, offertag_num=15, offer_number=6, rating_table=rating_table, tag=tag, offerlabel_mapping=offerlabel_mapping, tag_mapping=tag_mapping, reverse_offertag=reverse_offertag, offer_maptb=offer_maptb, offer_sparse=offer_sparse)
+        res = {'Offer': response}
+    except:
+        res = {'Offer':['OFF0029', 'OFF0001', 'OFF0002', 'OFF0004', 'OFF0005', 'OFF0006']}
     # 15為用來計算的offer tag數目，6為吐出offer的數目
 
     res = jsonify(res)

@@ -80,6 +80,7 @@ offertag_log = offertag_log.pivot_table(index=['ID'],columns='LABEL_ID', values 
 
 usertag_log = usertagging.groupby(['ID','UTID']).size().reset_index(name='COUNT')
 usertag_log = usertag_log.pivot_table(index=['ID'], columns='UTID',values ='COUNT').fillna(0)
+# left people with offers
 usertag_log = usertag_log.loc[offertag_log.index.tolist()]
 
 # offer mapping tables

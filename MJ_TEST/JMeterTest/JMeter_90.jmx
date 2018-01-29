@@ -15,7 +15,7 @@
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments"/>
         </elementProp>
-        <stringProp name="HTTPSampler.domain">ec2-34-216-194-152.us-west-2.compute.amazonaws.com</stringProp>
+        <stringProp name="HTTPSampler.domain">35.201.233.249</stringProp>
         <stringProp name="HTTPSampler.port">6010</stringProp>
         <stringProp name="HTTPSampler.protocol">HTTP</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -28,7 +28,7 @@
       <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Vid資料" enabled="true">
         <stringProp name="delimiter">,</stringProp>
         <stringProp name="fileEncoding"></stringProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Data/vids.csv</stringProp>
+        <stringProp name="filename">/home/lukechen419/JMeterTest/Data/vids.csv</stringProp>
         <boolProp name="ignoreFirstLine">false</boolProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
@@ -48,7 +48,7 @@
         <longProp name="ThreadGroup.start_time">1515466631000</longProp>
         <longProp name="ThreadGroup.end_time">1515466631000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">120</stringProp>
+        <stringProp name="ThreadGroup.duration">60</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
@@ -149,7 +149,7 @@ f.close();</stringProp>
             </value>
           </objProp>
           <stringProp name="TestPlan.comments">For scripting only</stringProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Results/ViewResultTree</stringProp>
+          <stringProp name="filename">/home/lukechen419/JMeterTest/Results/ViewResultTree</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
@@ -185,7 +185,7 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Results/SummaryReport</stringProp>
+          <stringProp name="filename">/home/lukechen419/JMeterTest/Results/SummaryReport</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="彙整報告" enabled="true">
@@ -221,7 +221,43 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateReport</stringProp>
+          <stringProp name="filename">/home/lukechen419/JMeterTest/Results/AggregateReport</stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename">/home/lukechen419/JMeterTest/Results/AggregateGraph</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="結果圖形" enabled="true">
@@ -257,7 +293,7 @@ f.close();</stringProp>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">/home/centos/CF_Recommandation/Results/ResultGraph</stringProp>
+          <stringProp name="filename">/home/lukechen419/JMeterTest/Results/ResultGraph</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

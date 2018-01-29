@@ -14,7 +14,7 @@
       <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV 資料設定" enabled="true">
         <stringProp name="delimiter">,</stringProp>
         <stringProp name="fileEncoding">UTF-8</stringProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Data/vids.csv</stringProp>
+        <stringProp name="filename">/home/lukechen419/JMeterTest/Data/vids.csv</stringProp>
         <boolProp name="ignoreFirstLine">false</boolProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
@@ -35,7 +35,7 @@
             </elementProp>
           </collectionProp>
         </elementProp>
-        <stringProp name="HTTPSampler.domain">172.31.16.26</stringProp>
+        <stringProp name="HTTPSampler.domain">10.140.0.3</stringProp>
         <stringProp name="HTTPSampler.port">6010</stringProp>
         <stringProp name="HTTPSampler.protocol">http</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -1500,7 +1500,7 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateGraph</stringProp>
+        <stringProp name="filename">/home/lukechen419/JMeterTest/Results/AggregateGraph</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="彙整報告" enabled="true">
@@ -1536,7 +1536,7 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateResult</stringProp>
+        <stringProp name="filename">/home/lukechen419/JMeterTest/Results/AggregateResult</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>

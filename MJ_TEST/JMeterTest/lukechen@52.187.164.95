@@ -14,7 +14,7 @@
       <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV 資料設定" enabled="true">
         <stringProp name="delimiter">,</stringProp>
         <stringProp name="fileEncoding">UTF-8</stringProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Data/vids.csv</stringProp>
+        <stringProp name="filename">/home/luke/CFR12N/Data/vids.csv</stringProp>
         <boolProp name="ignoreFirstLine">false</boolProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
@@ -1500,7 +1500,7 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateGraph</stringProp>
+        <stringProp name="filename">/home/luke/CFR12N/Results/AggregateGraph</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="彙整報告" enabled="true">
@@ -1536,13 +1536,9 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/home/centos/CF_Recommandation/Results/AggregateResult</stringProp>
+        <stringProp name="filename">/home/luke/CFR12N/Results/AggregateResult</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="工作台" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>

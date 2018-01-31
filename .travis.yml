@@ -10,4 +10,4 @@
     - pip install xlrd
 
   script:
-    - python ./Demo3/RecommandSystem/python_unittest.py
+    - python ./MJ_TEST/Unittest/python_unittest.py

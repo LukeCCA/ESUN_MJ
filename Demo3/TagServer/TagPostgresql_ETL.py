@@ -9,16 +9,16 @@ import sys
 import inspect
 import os
 
+
 IP = "lukepostgres"
 USER = 'postgres'
 PASSWORD = 'lukechen0419'
 DB = 'postgres'
-
 '''
-IP = "localhost"
-USER = 'chienan'
-PASSWORD = ''
-DB = 'MJ_PROTOTYPE'
+IP = os.environ['POSTGRES_IP']
+USER = os.environ['POSTGRES_USER']
+PASSWORD = os.environ['POSTGRES_PASSWORD']
+DB = os.environ['POSTGRES_MJDB']
 '''
 
 # connect PostgreSQL
@@ -32,7 +32,7 @@ cur = conn.cursor()
 
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
-tag_data = os.path.join( file_direction , 'INTENT_TAG.xlsx' )
+tag_data = os.path.join( file_direction , './Data/INTENT_TAG.xlsx' )
 df = pd.read_excel(tag_data)
 
 '''

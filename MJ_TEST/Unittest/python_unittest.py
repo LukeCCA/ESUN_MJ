@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-import function_testing
+import Collobrative_Filtering as CF
 import os
 import inspect
 import operator
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
         offertagging = pd.read_csv(offertagging, sep='\t')
         usertagging = pd.read_csv(usertagging, sep='\t')
 
-        function_test = function_testing.threshold_likes(offertagging, id_min=10, offer_min=5)
+        function_test = CF.threshold_likes(offertagging, id_min=10, offer_min=5)
         done = False
         while not done:
             starting_shape = offertagging.shape[0]
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
         offertagging = pd.read_csv(offertagging, sep='\t')
         usertagging = pd.read_csv(usertagging, sep='\t')
 
-        fuction_test = function_testing.mapping_table(sorted(usertagging.UTID.unique()))[0]
+        fuction_test = CF.mapping_table(sorted(usertagging.UTID.unique()))[0]
         mapping_table = {}
         for num, utid in enumerate(sorted(usertagging.UTID.unique())):
             mapping_table[num] = utid
@@ -56,8 +56,8 @@ class Test(unittest.TestCase):
 
     def test_sort(self):
         testing_data = [5, 3, 4, 9, 21, 10]
-        output = [3, 4, 5, 9, 10, 21]
-        sort_funtest = function_testing.sort_output(testing_data)
+        output = [21, 10, 9, 5, 4, 3]
+        sort_funtest = CF.sort_output(testing_data)
         function_test = []    
         for i in sort_funtest:
             function_test.append(testing_data[i])
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
         output = np.zeros(10)
         output[5] = 1
         output[3] = 1
-        function_test = function_testing.create_table(range(10), testing_data)[0]
+        function_test = CF.create_table(range(10), testing_data)[0]
         self.assertEqual(function_test.tolist(), output.tolist())
     
     def test_cosinesimilarity(self):

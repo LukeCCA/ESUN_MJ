@@ -14,8 +14,8 @@ import redis
 #如果使用讀取資料的形式
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
-tagging = os.path.join( file_direction , 'MJ_TAG.xlsx' )
-taggingvalue = os.path.join( file_direction , 'MJ_TAGVALUE.xlsx' )
+tagging = os.path.join( file_direction , './Data/MJ_TAG.xlsx' )
+taggingvalue = os.path.join( file_direction , './Data/MJ_TAGVALUE.xlsx' )
 df1 = pd.read_excel(tagging)
 df2 = pd.read_excel(taggingvalue)
 
@@ -25,6 +25,7 @@ df2 = pd.read_excel(sys.argv[2])
 '''
 df = pd.concat([df1,df2]).reset_index(drop = True)
 '''
+DB = DB = os.environ['POSTGRES_MJDB']
 HOST_POSTGRES = os.environ['POSTGRES_IP']
 USER = os.environ['POSTGRES_USER']
 PASSWORD = os.environ['POSTGRES_PASSWORD']
@@ -35,9 +36,9 @@ HOST_POSTGRES = 'lukepostgres'
 USER = 'postgres'
 PASSWORD = 'lukechen0419'
 HOST_REDIS = 'lukeredis'
-'''
-DB = 'MJ_PROTOTYPE'
-'''
+
+
+
 # 貼標庫格式
 def Tag_query(tag, sql_db):
     SQL = "SELECT tag_info FROM tag_db WHERE tag_info->>'TAG_ID' = '{}';".format(tag)

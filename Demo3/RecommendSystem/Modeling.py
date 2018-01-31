@@ -53,8 +53,8 @@ def mapping_table(data):
 # Load Data
 file_path = inspect.getfile(inspect.currentframe())
 file_direction = os.path.dirname(os.path.abspath(file_path))
-offertagging = os.path.join(file_direction, 'Train_Data.csv')
-usertagging = os.path.join(file_direction, 'MJ_TAG.xlsx')
+offertagging = os.path.join(file_direction, './Data/Train_Data.csv')
+usertagging = os.path.join(file_direction, './Data/MJ_TAG.xlsx')
 offertagging = pd.read_csv(offertagging)
 usertagging = pd.read_excel(usertagging)
 

@@ -11,7 +11,9 @@
 docker save -o tag_api.tar tag_api:1.0 
 docker save -o recommand_api.tar recommand_api:1.0 
 ```
+
 ## 測試
 ```
 Docker Container服務： 在根目錄底下執行 docker-compose -d
+測試相關檔案：\MJ_TEST
 ```
